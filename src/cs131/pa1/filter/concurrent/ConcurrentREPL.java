@@ -2,10 +2,8 @@ package cs131.pa1.filter.concurrent;
 
 import cs131.pa1.filter.Message;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Queue;
-import java.util.Scanner;
+import java.util.*;
+
 
 public class ConcurrentREPL {
 
@@ -64,6 +62,7 @@ public class ConcurrentREPL {
 		}
 	}
 	
+	//prints out background jobs line by line
 	public static void displayJobs() {
 		for (int i = 0; i < backgroundJobs.size(); i++) {
 			System.out.println(i+1 + "." +" " + backgroundJobs.get(i));

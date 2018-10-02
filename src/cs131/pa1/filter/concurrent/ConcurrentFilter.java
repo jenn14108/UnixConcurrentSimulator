@@ -35,6 +35,10 @@ public abstract class ConcurrentFilter extends Filter implements Runnable {
 		return next;
 	}
 	
+	public void run() {
+		process();
+	}
+	
 	public void process(){
 		while (!input.isEmpty()){
 			String line = input.poll();
@@ -51,10 +55,5 @@ public abstract class ConcurrentFilter extends Filter implements Runnable {
 	}
 	
 	protected abstract String processLine(String line);
-	
-	
-	public void run() {
-		
-	}
 	
 }
