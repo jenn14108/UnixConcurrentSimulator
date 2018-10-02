@@ -8,7 +8,7 @@ import cs131.pa1.filter.Message;
 
 public class ConcurrentCommandBuilder {
 	
-	public static ConcurrentFilter createFiltersFromCommand(String command){
+	public static List<ConcurrentFilter> createFiltersFromCommand(String command){
 		//initialize the list that will hold all of the filters
 				List<ConcurrentFilter> filters = new LinkedList<ConcurrentFilter>();
 				//adding whitespace so that string splitting doesn't bug
@@ -36,7 +36,7 @@ public class ConcurrentCommandBuilder {
 				filters.add(fin);
 				
 				if(linkFilters(filters, command) == true){
-					return filters.get(0);
+					return filters;
 				} else {
 					return null;
 				}
