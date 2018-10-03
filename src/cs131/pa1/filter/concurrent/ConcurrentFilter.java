@@ -10,6 +10,7 @@ public abstract class ConcurrentFilter extends Filter implements Runnable {
 	
 	protected BlockingQueue<String> input;
 	protected BlockingQueue<String> output;
+	protected boolean isDone = false;
 	
 	@Override
 	public void setPrevFilter(Filter prevFilter) {
@@ -37,21 +38,38 @@ public abstract class ConcurrentFilter extends Filter implements Runnable {
 	
 	public void run() {
 		process();
+		//set isDone to true after the specific command has completed execution
+		isDone = true;
 	}
 	
+	//process() method is now concurrent rather than sequential 
 	public void process(){
-		while (!input.isEmpty()){
-			String line = input.poll();
-			String processedLine = processLine(line);
-			if (processedLine != null){
-				output.add(processedLine);
+		while (true) {
+			//proceed if there are commands to be executed
+			if (!input.isEmpty()) {
+				try {
+					//using take() rather than poll() because there is no predefined waiting time, 
+					//will wait until new input is available, otherwise go to sleep 
+					String line = input.take();
+					String processedLine = processLine(line);
+					if (processedLine != null) {
+						output.add(processedLine);
+					}
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			//break out of the wait and terminate if the previous command has finished 
+			//executing and there is no more input to be received
+			} else if (input.isEmpty() && prev.isDone()){
+				isDone = true;
+				break;
 			}
-		}	
+		}
 	}
 	
 	@Override
 	public boolean isDone() {
-		return input.size() == 0;
+		return isDone;
 	}
 	
 	protected abstract String processLine(String line);
