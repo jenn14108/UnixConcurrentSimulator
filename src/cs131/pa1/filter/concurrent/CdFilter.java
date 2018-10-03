@@ -10,6 +10,7 @@ public class CdFilter extends ConcurrentFilter {
 	
 	public CdFilter(String line) throws Exception {
 		super();
+		
 		dirToSet = ConcurrentREPL.currentWorkingDirectory;
 		String[] args = line.trim().split(" ");
 		if(args.length == 1) {
@@ -33,6 +34,12 @@ public class CdFilter extends ConcurrentFilter {
 		}
 	}
 	
+	@Override
+	public void run() {
+		process();
+	}
+	
+	@Override
 	public void process() {
 		processLine("");
 	}
