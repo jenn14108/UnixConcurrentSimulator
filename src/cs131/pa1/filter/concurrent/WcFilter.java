@@ -9,6 +9,11 @@ public class WcFilter extends ConcurrentFilter {
 		super();
 	}
 	
+	@Override
+	public void run() {
+		process();
+	}
+	
 	public void process() {
 		if(isDone()) {
 			output.add(processLine(null));
@@ -17,6 +22,7 @@ public class WcFilter extends ConcurrentFilter {
 		}
 	}
 	
+	@Override
 	public String processLine(String line) {
 		//prints current result if ever passed a null
 		if(line == null) {

@@ -10,6 +10,7 @@ import cs131.pa1.filter.Message;
 public class RedirectFilter extends ConcurrentFilter {
 	private FileWriter fw;
 	
+	
 	public RedirectFilter(String line) throws Exception {
 		super();
 		String[] param = line.split(">");

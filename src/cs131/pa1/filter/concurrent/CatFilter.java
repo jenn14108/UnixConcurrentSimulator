@@ -38,8 +38,10 @@ public class CatFilter extends ConcurrentFilter{
 	@Override
 	public void run() {
 		process();
+		isDone = true;
 	}
 	
+	@Override
 	public void process() {
 		while(reader.hasNext()) {
 			String processedLine = processLine("");
@@ -50,7 +52,8 @@ public class CatFilter extends ConcurrentFilter{
 		}
 		reader.close();
 	}
-
+	
+	@Override
 	public String processLine(String line) {
 		if(reader.hasNextLine()) {
 			return reader.nextLine();
