@@ -35,6 +35,11 @@ public class CatFilter extends ConcurrentFilter{
 		}
 	}
 
+	@Override
+	public void run() {
+		process();
+	}
+	
 	public void process() {
 		while(reader.hasNext()) {
 			String processedLine = processLine("");
