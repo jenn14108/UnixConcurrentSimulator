@@ -14,6 +14,11 @@ public class LsFilter extends ConcurrentFilter{
 	}
 	
 	@Override
+	public void run() {
+		process();
+	}
+	
+	@Override
 	public void process() {
 		while(counter < flist.length) {
 			output.add(processLine(""));
