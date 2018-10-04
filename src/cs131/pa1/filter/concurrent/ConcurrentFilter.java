@@ -10,6 +10,7 @@ public abstract class ConcurrentFilter extends Filter implements Runnable {
 	
 	protected BlockingQueue<String> input;
 	protected BlockingQueue<String> output;
+	protected final String POISON_PILL = "WAKE_UP_TREAD"; 
 	
 	
 	@Override

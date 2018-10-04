@@ -30,11 +30,13 @@ public class ConcurrentREPL {
 				}
 				//building the filters list from the command
 				List<ConcurrentFilter> filterlist = ConcurrentCommandBuilder.createFiltersFromCommand(command);
-				if (command.endsWith("&")) {
-					createBackThreadExecuteFilters(filterlist);
-				} else {
-					createThreadExecuteFilters(filterlist);
-				}	
+				if (filterlist != null) {
+					if (command.endsWith("&")) {
+						createBackThreadExecuteFilters(filterlist);
+					} else {
+						createThreadExecuteFilters(filterlist);
+					}	
+				}
 				
 				if (command.startsWith("kill")) {
 					int index = command.charAt(command.length()-1)-'0';
@@ -64,6 +66,7 @@ public class ConcurrentREPL {
 		} catch (InterruptedException e){
 			e.printStackTrace();
 		}
+		
 	}
 	
 	
