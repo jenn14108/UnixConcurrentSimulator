@@ -33,17 +33,32 @@ public class RedirectFilter extends ConcurrentFilter {
 	
 	@Override
 	public void process() {
-		while(!isDone()) {
-			processLine(input.poll());
+		while (true) {
+			try {
+				//break out of the wait and terminate if the previous command has finished 
+				//executing and there is no more input to be received
+				if (input.isEmpty() && prev.isDone()){
+					break;
+				}
+				//using take() rather than poll() because there is no predefined waiting time, 
+				//will wait until new input is available, otherwise go to sleep 
+				String line = input.take();
+				processLine(line);
+				if (line.equals(this.POISON_PILL)) {
+					break;
+				}
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
-		
 	}
 	
 	@Override
 	public String processLine(String line) {
 		try {
-			fw.append(line + "\n");
-			if(isDone()) {
+			if (!line.equals(this.POISON_PILL)) {
+				fw.append(line + "\n");
+			} else {
 				fw.flush();
 				fw.close();
 			}
