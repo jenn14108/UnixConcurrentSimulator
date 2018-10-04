@@ -31,12 +31,15 @@ public class RedirectFilter extends ConcurrentFilter {
 		}
 	}
 	
+	@Override
 	public void process() {
 		while(!isDone()) {
 			processLine(input.poll());
 		}
+		
 	}
 	
+	@Override
 	public String processLine(String line) {
 		try {
 			fw.append(line + "\n");

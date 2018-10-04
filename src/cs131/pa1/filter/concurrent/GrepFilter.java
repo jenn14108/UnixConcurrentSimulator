@@ -1,5 +1,8 @@
 package cs131.pa1.filter.concurrent;
 
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
+
 import cs131.pa1.filter.Message;
 
 public class GrepFilter extends ConcurrentFilter {
@@ -14,6 +17,11 @@ public class GrepFilter extends ConcurrentFilter {
 			System.out.printf(Message.REQUIRES_PARAMETER.toString(), line);
 			throw new Exception();
 		}
+	}
+	
+	@Override
+	public void process() {
+		super.process();
 	}
 	
 	@Override

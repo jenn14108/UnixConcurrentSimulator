@@ -45,20 +45,24 @@ public abstract class ConcurrentFilter extends Filter implements Runnable {
 	public void process(){
 		while (true) {
 			try {
+				//break out of the wait and terminate if the previous command has finished 
+				//executing and there is no more input to be received
+				if (input.isEmpty() && prev.isDone()){
+					break;
+				}
 				//using take() rather than poll() because there is no predefined waiting time, 
 				//will wait until new input is available, otherwise go to sleep 
 				String line = input.take();
+				if (line.equals(this.POISON_PILL)) {
+					output.add(this.POISON_PILL);
+					break;
+				}
 				String processedLine = processLine(line);
 				if (processedLine != null) {
 					output.add(processedLine);
-				}
+				} 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-			}
-			//break out of the wait and terminate if the previous command has finished 
-			//executing and there is no more input to be received
-			if (input.isEmpty() && prev.isDone()){
-				break;
 			}
 		}
 	}

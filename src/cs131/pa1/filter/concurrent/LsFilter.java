@@ -23,6 +23,8 @@ public class LsFilter extends ConcurrentFilter{
 		while(counter < flist.length) {
 			output.add(processLine(""));
 		}
+		
+		output.add(this.POISON_PILL);
 	}
 	
 	@Override

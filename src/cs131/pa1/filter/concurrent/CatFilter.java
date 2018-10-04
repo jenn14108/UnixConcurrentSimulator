@@ -50,6 +50,10 @@ public class CatFilter extends ConcurrentFilter{
 			output.add(processedLine);
 		}
 		reader.close();
+		
+		//add POISON_PILL to notify next filter that there will
+		//be no more input
+		output.add(this.POISON_PILL);
 	}
 	
 	@Override

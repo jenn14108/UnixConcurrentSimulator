@@ -15,11 +15,11 @@ public class PrintFilter extends ConcurrentFilter {
 		while(true) {
 			try {
 				String line = input.take();
-				if (line != null ) {
-					processLine(line);
-				} else {
+				if (line.equals(this.POISON_PILL)) {
 					break;
-				}
+				} else if (line != null ) {
+					processLine(line);
+				} 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

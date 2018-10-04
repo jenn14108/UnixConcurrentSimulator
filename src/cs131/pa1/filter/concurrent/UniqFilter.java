@@ -11,12 +11,16 @@ public class UniqFilter extends ConcurrentFilter{
 	}
 
 	
+	@Override
 	public String processLine(String line) {
+		line = line.trim();
 		if(existingStringSet.contains(line)) {
 			return null;
 		}else {
 			existingStringSet.add(line);
 			return line;
 		}
+		
+		
 	}
 }
