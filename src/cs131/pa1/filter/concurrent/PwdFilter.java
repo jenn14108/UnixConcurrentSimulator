@@ -5,14 +5,12 @@ public class PwdFilter extends ConcurrentFilter {
 		super();
 	}
 	
-	@Override 
-	public void run() {
-		process();
-	}
-	
 	@Override
 	public void process() {
+		//add to output the current working directory, then signal that the command
+		//has been completed by adding the poison_pill into the output
 		output.add(processLine(""));
+		output.add(this.POISON_PILL);
 	}
 	
 	@Override
