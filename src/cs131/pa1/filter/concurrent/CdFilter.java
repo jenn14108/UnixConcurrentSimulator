@@ -42,6 +42,7 @@ public class CdFilter extends ConcurrentFilter {
 	@Override
 	public void process() {
 		processLine("");
+		output.add(this.POISON_PILL);
 	}
 	
 	public String processLine(String line) {
