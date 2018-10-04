@@ -3,6 +3,7 @@ package cs131.pa1.filter.concurrent;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 import cs131.pa1.filter.Filter;
 import cs131.pa1.filter.Message;
@@ -18,6 +19,8 @@ public class RedirectFilter extends ConcurrentFilter {
 			if(param[1].trim().equals("")) {
 				System.out.printf(Message.REQUIRES_PARAMETER.toString(), line.trim());
 				throw new Exception();
+			} else if (param[1].contains("&")) {
+				param[1] = param[1].substring(0, param[1].lastIndexOf('&'));
 			}
 			try {
 				fw = new FileWriter(new File(ConcurrentREPL.currentWorkingDirectory + Filter.FILE_SEPARATOR + param[1].trim()));
