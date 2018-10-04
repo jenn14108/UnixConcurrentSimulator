@@ -25,27 +25,34 @@ public class ConcurrentREPL {
 			if(command.equals("exit")) {
 				break;
 			} else if(!command.trim().equals("")) {
-				if (command.equals("repl_jobs")) {
+				if (command.trim().equals("repl_jobs")) {
 					displayJobs();
-				}
-				//building the filters list from the command
-				List<ConcurrentFilter> filterlist = ConcurrentCommandBuilder.createFiltersFromCommand(command);
-				if (filterlist != null) {
-					if (command.endsWith("&")) {
-						createBackThreadExecuteFilters(filterlist);
+				} else if (command.split(" ")[0].equals("kill")) {
+					if (command.split(" ").length == 1) {
+						System.out.printf(Message.REQUIRES_PARAMETER.toString(), command);
+					} else if (!Character.isDigit(command.split(" ")[1].charAt(0))) {
+						System.out.printf(Message.INVALID_PARAMETER.toString(), command);
 					} else {
-						createThreadExecuteFilters(filterlist);
-					}	
-				}
-				
-				if (command.startsWith("kill")) {
-					int index = command.charAt(command.length()-1)-'0';
-					int i = 1; 
-					for(String job: backgroundJobs.keySet()) {
-						if (i == index) backgroundJobs.remove(job);
-						i++;
+						int index = command.charAt(command.length()-1)-'0';
+						int i = 1; 
+						for(String job: backgroundJobs.keySet()) {
+							if (i == index) backgroundJobs.remove(job);
+							i++;
+						}
+					}
+					//|| command.split(" ")[1].charAt(0)-'0' > backgroundJobs.size()
+				} else {
+					//building the filters list from the command
+					List<ConcurrentFilter> filterlist = ConcurrentCommandBuilder.createFiltersFromCommand(command);
+					if (filterlist != null) {
+						if (command.endsWith("&")) {
+							createBackThreadExecuteFilters(filterlist);
+						} else {
+							createThreadExecuteFilters(filterlist);
+						}	
 					}
 				}
+				
 			}
 		}
 		
