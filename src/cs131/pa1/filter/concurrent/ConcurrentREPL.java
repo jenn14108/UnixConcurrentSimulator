@@ -8,7 +8,9 @@ import java.util.*;
 public class ConcurrentREPL {
 
 	static String currentWorkingDirectory;
-	static List<String> backgroundJobs = new ArrayList<>(); 
+//	static List<String> backgroundJobs = new ArrayList<>(); 
+//	static List<Thread> backgroundLastThreads = new ArrayList<>();
+	static Map<String,Thread> backgroundJobs = new LinkedHashMap<>();
 	static String command;
 	
 	public static void main(String[] args){
@@ -29,16 +31,18 @@ public class ConcurrentREPL {
 				//building the filters list from the command
 				List<ConcurrentFilter> filterlist = ConcurrentCommandBuilder.createFiltersFromCommand(command);
 				if (command.endsWith("&")) {
-					backgroundJobs.add(command);
-					createThreadExecuteFilters(filterlist);
-					backgroundJobs.remove(command);
+					createBackThreadExecuteFilters(filterlist);
 				} else {
 					createThreadExecuteFilters(filterlist);
 				}	
 				
 				if (command.startsWith("kill")) {
 					int index = command.charAt(command.length()-1)-'0';
-					backgroundJobs.remove(index);
+					int i = 1; 
+					for(String job: backgroundJobs.keySet()) {
+						if (i == index) backgroundJobs.remove(job);
+						i++;
+					}
 				}
 			}
 		}
@@ -62,10 +66,28 @@ public class ConcurrentREPL {
 		}
 	}
 	
+	
+	public static void createBackThreadExecuteFilters(List<ConcurrentFilter> filterlist) {
+		//Creating threads from the filter list and starting all threads
+		Thread thr = new Thread();
+		for (ConcurrentFilter filter: filterlist) {
+			thr = new Thread(filter);
+			thr.start();
+		}
+		backgroundJobs.put(command,thr);
+	}
+	
 	//prints out background jobs line by line
 	public static void displayJobs() {
-		for (int i = 0; i < backgroundJobs.size(); i++) {
-			System.out.println(i+1 + "." +" " + backgroundJobs.get(i));
+		for (String job: backgroundJobs.keySet()) {
+			if (backgroundJobs.get(job).getState().equals(Thread.State.TERMINATED)) {
+				backgroundJobs.remove(job);
+			}
+		}
+		int i = 1; 
+		for (String job: backgroundJobs.keySet()) {
+			System.out.println(i + "." +" " + job);
+			i++;
 		}
 	}
 

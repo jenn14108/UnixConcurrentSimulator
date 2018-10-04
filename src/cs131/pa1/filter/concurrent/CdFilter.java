@@ -37,7 +37,6 @@ public class CdFilter extends ConcurrentFilter {
 	@Override
 	public void run() {
 		process();
-		isDone = true;
 	}
 	
 	@Override

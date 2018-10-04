@@ -10,7 +10,7 @@ public abstract class ConcurrentFilter extends Filter implements Runnable {
 	
 	protected BlockingQueue<String> input;
 	protected BlockingQueue<String> output;
-	protected boolean isDone = false;
+	
 	
 	@Override
 	public void setPrevFilter(Filter prevFilter) {
@@ -38,8 +38,6 @@ public abstract class ConcurrentFilter extends Filter implements Runnable {
 	
 	public void run() {
 		process();
-		//set isDone to true after the specific command has completed execution
-		isDone = true;
 	}
 	
 	//process() method is now concurrent rather than sequential 
@@ -59,15 +57,17 @@ public abstract class ConcurrentFilter extends Filter implements Runnable {
 			//break out of the wait and terminate if the previous command has finished 
 			//executing and there is no more input to be received
 			if (input.isEmpty() && prev.isDone()){
-				isDone = true;
 				break;
 			}
 		}
 	}
 	
+	//determine the current thread running right now, and check whether
+	//it has terminated
 	@Override
 	public boolean isDone() {
-		return isDone;
+		Thread current = Thread.currentThread();
+		return current.getState().equals(Thread.State.TERMINATED);
 	}
 	
 	protected abstract String processLine(String line);
