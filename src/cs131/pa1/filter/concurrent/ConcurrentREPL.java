@@ -97,14 +97,16 @@ public class ConcurrentREPL {
 	
 	//prints out background jobs line by line
 	public static void displayJobs() {
-		for (BackgroundCommand job: backgroundJobs) {
-			//deletes the job from the list if its thread is terminated
-			if (!job.getThread().isAlive()) {
-				backgroundJobs.remove(job);
-			} else {
-				//print it out if it's still running
-				System.out.println(" "+job.getIndex() + "." +" "+job.getCommand());
-			}
+		for (Iterator<BackgroundCommand> it = backgroundJobs.iterator(); it.hasNext(); ) {
+			//create an iterator
+		    BackgroundCommand job = it.next();
+		    //deletes the job from the list if its thread is terminated
+		    if (!job.getThread().isAlive()) {
+		        it.remove();
+		    } else {
+		    		//print the command string out if it's still running
+		    		System.out.println(" "+job.getIndex() + "." +" "+job.getCommand());
+		    }
 		}
 	}
 
