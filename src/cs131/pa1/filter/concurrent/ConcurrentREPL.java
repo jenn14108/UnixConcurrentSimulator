@@ -37,7 +37,7 @@ public class ConcurrentREPL {
 					} else {
 						
 						int index = command.charAt(command.length()-1)-'0';
-						
+
 						int i = 1;
 						//go through the background command list
 						for(BackgroundCommand job: backgroundJobs) {
@@ -95,11 +95,16 @@ public class ConcurrentREPL {
 		}
 		//using last thread, create background command object and add it to list
 		backgroundJobs.add(new BackgroundCommand(command,thr));
+
 	}
 	
 	//prints out background jobs line by line
 	public static void displayJobs() {
+
 		int i = 1; 
+
+		int counter = 1; 
+
 		for (Iterator<BackgroundCommand> it = backgroundJobs.iterator(); it.hasNext(); ) {
 			//create an iterator
 		    BackgroundCommand job = it.next();
@@ -107,6 +112,7 @@ public class ConcurrentREPL {
 		    if (!job.getThread().isAlive()) {
 		        it.remove();
 		    } else {
+
 		    	//print the command string out if it's still running
 		    	System.out.println("    "+i + "." +" "+job.getCommand());
 		    	i++;
