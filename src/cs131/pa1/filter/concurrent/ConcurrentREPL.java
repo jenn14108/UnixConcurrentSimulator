@@ -8,10 +8,11 @@ import java.util.*;
 public class ConcurrentREPL {
 
 	static String currentWorkingDirectory;
-//	static List<String> backgroundJobs = new ArrayList<>(); 
-//	static List<Thread> backgroundLastThreads = new ArrayList<>();
-	static Map<String,Thread> backgroundJobs = new LinkedHashMap<>();
+	//a list that stores all background command objects
+	static List<BackgroundCommand> backgroundJobs = new ArrayList<>(); 
+
 	static String command;
+	static int id = 1; //id of each of the background command object
 	
 	public static void main(String[] args){
 		currentWorkingDirectory = System.getProperty("user.dir");
@@ -21,26 +22,32 @@ public class ConcurrentREPL {
 		while(true) {
 			//obtaining the command from the user
 			System.out.print(Message.NEWCOMMAND);
-			command = s.nextLine();
+			command = s.nextLine().trim();
 			if(command.equals("exit")) {
 				break;
-			} else if(!command.trim().equals("")) {
-				if (command.trim().equals("repl_jobs")) {
+			} else if(!command.equals("")) {
+				if (command.equals("repl_jobs")) {
 					displayJobs();
 				} else if (command.split(" ")[0].equals("kill")) {
+					
 					if (command.split(" ").length == 1) {
 						System.out.printf(Message.REQUIRES_PARAMETER.toString(), command);
 					} else if (!Character.isDigit(command.split(" ")[1].charAt(0))) {
 						System.out.printf(Message.INVALID_PARAMETER.toString(), command);
 					} else {
+						
 						int index = command.charAt(command.length()-1)-'0';
-						int i = 1; 
-						for(String job: backgroundJobs.keySet()) {
-							if (i == index) backgroundJobs.remove(job);
-							i++;
+						
+						//go through the background command list
+						for(BackgroundCommand job: backgroundJobs) {
+							//delete the job from the list if its id matches user input index
+							if (index == job.getIndex()) {
+								backgroundJobs.remove(job);
+								//terminate the thread of the background command job as well
+								job.getThread().interrupt();
+							}
 						}
 					}
-					//|| command.split(" ")[1].charAt(0)-'0' > backgroundJobs.size()
 				} else {
 					//building the filters list from the command
 					List<ConcurrentFilter> filterlist = ConcurrentCommandBuilder.createFiltersFromCommand(command);
@@ -52,7 +59,6 @@ public class ConcurrentREPL {
 						}	
 					}
 				}
-				
 			}
 		}
 		
@@ -84,20 +90,21 @@ public class ConcurrentREPL {
 			thr = new Thread(filter);
 			thr.start();
 		}
-		backgroundJobs.put(command,thr);
+		//using last thread, create background command object and add it to list
+		backgroundJobs.add(new BackgroundCommand(id,command,thr));
+		id++;
 	}
 	
 	//prints out background jobs line by line
 	public static void displayJobs() {
-		for (String job: backgroundJobs.keySet()) {
-			if (backgroundJobs.get(job).getState().equals(Thread.State.TERMINATED)) {
+		for (BackgroundCommand job: backgroundJobs) {
+			//deletes the job from the list if its thread is terminated
+			if (!job.getThread().isAlive()) {
 				backgroundJobs.remove(job);
+			} else {
+				//print it out if it's still running
+				System.out.println(" "+job.getIndex() + "." +" "+job.getCommand());
 			}
-		}
-		int i = 1; 
-		for (String job: backgroundJobs.keySet()) {
-			System.out.println(i + "." +" " + job);
-			i++;
 		}
 	}
 
