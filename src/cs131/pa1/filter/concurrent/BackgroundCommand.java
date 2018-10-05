@@ -3,11 +3,11 @@ package cs131.pa1.filter.concurrent;
 public class BackgroundCommand {
 	private String command;
 	private Thread thread;
-	private int index;
-	public BackgroundCommand(int index, String command,Thread thread) {
+	//private int index;
+	public BackgroundCommand(String command,Thread thread) {
 		this.command = command;
 		this.thread = thread;
-		this.index = index;
+		//this.index = index;
 		
 	}
 	
@@ -19,7 +19,7 @@ public class BackgroundCommand {
 		return this.thread;
 	}
 	
-	public int getIndex() {
-		return this.index;
-	}
+//	public int getIndex() {
+//		return this.index;
+//	}
 }

@@ -12,13 +12,13 @@ public class ConcurrentREPL {
 	static List<BackgroundCommand> backgroundJobs = new ArrayList<>(); 
 
 	static String command;
-	static int id = 1; //id of each of the background command object
 	
 	public static void main(String[] args){
 		currentWorkingDirectory = System.getProperty("user.dir");
 		Scanner s = new Scanner(System.in);
 		System.out.print(Message.WELCOME);
-
+		backgroundJobs = new ArrayList<>(); 
+		
 		while(true) {
 			//obtaining the command from the user
 			System.out.print(Message.NEWCOMMAND);
@@ -38,14 +38,17 @@ public class ConcurrentREPL {
 						
 						int index = command.charAt(command.length()-1)-'0';
 						
+						int i = 1;
 						//go through the background command list
 						for(BackgroundCommand job: backgroundJobs) {
 							//delete the job from the list if its id matches user input index
-							if (index == job.getIndex()) {
+							if (index == i) {
 								backgroundJobs.remove(job);
 								//terminate the thread of the background command job as well
 								job.getThread().interrupt();
+								break;
 							}
+							i++;
 						}
 					}
 				} else {
@@ -91,12 +94,12 @@ public class ConcurrentREPL {
 			thr.start();
 		}
 		//using last thread, create background command object and add it to list
-		backgroundJobs.add(new BackgroundCommand(id,command,thr));
-		id++;
+		backgroundJobs.add(new BackgroundCommand(command,thr));
 	}
 	
 	//prints out background jobs line by line
 	public static void displayJobs() {
+		int i = 1; 
 		for (Iterator<BackgroundCommand> it = backgroundJobs.iterator(); it.hasNext(); ) {
 			//create an iterator
 		    BackgroundCommand job = it.next();
@@ -104,8 +107,9 @@ public class ConcurrentREPL {
 		    if (!job.getThread().isAlive()) {
 		        it.remove();
 		    } else {
-		    		//print the command string out if it's still running
-		    		System.out.println(" "+job.getIndex() + "." +" "+job.getCommand());
+		    	//print the command string out if it's still running
+		    	System.out.println("    "+i + "." +" "+job.getCommand());
+		    	i++;
 		    }
 		}
 	}
