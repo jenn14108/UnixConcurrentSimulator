@@ -100,23 +100,19 @@ public class ConcurrentREPL {
 	
 	//prints out background jobs line by line
 	public static void displayJobs() {
-
 		int i = 1; 
-
-		int counter = 1; 
-
 		for (Iterator<BackgroundCommand> it = backgroundJobs.iterator(); it.hasNext(); ) {
 			//create an iterator
 		    BackgroundCommand job = it.next();
 		    //deletes the job from the list if its thread is terminated
 		    if (!job.getThread().isAlive()) {
-		        it.remove();
+		        it.remove();		    
 		    } else {
 
 		    	//print the command string out if it's still running
-		    	System.out.println("    "+i + "." +" "+job.getCommand());
-		    	i++;
+		    	System.out.println("\t"+i + "." +" "+job.getCommand());
 		    }
+		    i++;
 		}
 	}
 
