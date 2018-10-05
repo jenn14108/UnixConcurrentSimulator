@@ -13,6 +13,7 @@ public class ConcurrentREPL {
 	static int id; 
 	static String command;
 	
+	
 	public static void main(String[] args){
 		currentWorkingDirectory = System.getProperty("user.dir");
 		Scanner s = new Scanner(System.in);
@@ -44,9 +45,9 @@ public class ConcurrentREPL {
 						for(BackgroundCommand job: backgroundJobs) {
 							//delete the job from the list if its id matches user input index
 							if (index == i) {
-								backgroundJobs.remove(job);
 								//terminate the thread of the background command job as well
-								job.getThread().interrupt();
+								job.getThread().stop();
+								backgroundJobs.remove(job);
 								break;
 							}
 							i++;
@@ -109,7 +110,6 @@ public class ConcurrentREPL {
 		    if (!job.getThread().isAlive()) {
 		        it.remove();		    
 		    } else {
-
 		    	//print the command string out if it's still running
 		    	System.out.println("\t"+ job.getId() + "." +" "+job.getCommand());
 		    }

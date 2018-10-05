@@ -11,8 +11,7 @@ public abstract class ConcurrentFilter extends Filter implements Runnable {
 	protected BlockingQueue<String> input;
 	protected BlockingQueue<String> output;
 	protected final String POISON_PILL = "WAKE_UP_TREAD"; 
-	
-	
+
 	@Override
 	public void setPrevFilter(Filter prevFilter) {
 		prevFilter.setNextFilter(this);
@@ -45,11 +44,6 @@ public abstract class ConcurrentFilter extends Filter implements Runnable {
 	public void process(){
 		while (true) {
 			try {
-				//break out of the wait and terminate if the previous command has finished 
-				//executing and there is no more input to be received
-				if (input.isEmpty() && prev.isDone()){
-					break;
-				}
 				//using take() rather than poll() because there is no predefined waiting time, 
 				//will wait until new input is available, otherwise go to sleep 
 				String line = input.take();
@@ -76,5 +70,5 @@ public abstract class ConcurrentFilter extends Filter implements Runnable {
 	}
 	
 	protected abstract String processLine(String line);
-	
+
 }

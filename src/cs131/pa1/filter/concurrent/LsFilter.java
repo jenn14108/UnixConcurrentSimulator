@@ -20,7 +20,7 @@ public class LsFilter extends ConcurrentFilter{
 	
 	@Override
 	public void process() {
-		while(counter < flist.length) {
+		while(counter < flist.length && !Thread.currentThread().isInterrupted()) {
 			output.add(processLine(""));
 		}
 		
