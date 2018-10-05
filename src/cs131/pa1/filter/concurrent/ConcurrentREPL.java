@@ -37,15 +37,16 @@ public class ConcurrentREPL {
 					} else {
 						
 						int index = command.charAt(command.length()-1)-'0';
-						
+						int counter = 0; 
 						//go through the background command list
 						for(BackgroundCommand job: backgroundJobs) {
 							//delete the job from the list if its id matches user input index
-							if (index == job.getIndex()) {
+							if (index == counter+1) {
 								backgroundJobs.remove(job);
 								//terminate the thread of the background command job as well
 								job.getThread().interrupt();
 							}
+							counter++;
 						}
 					}
 				} else {
@@ -91,12 +92,13 @@ public class ConcurrentREPL {
 			thr.start();
 		}
 		//using last thread, create background command object and add it to list
-		backgroundJobs.add(new BackgroundCommand(id,command,thr));
+		backgroundJobs.add(new BackgroundCommand(command,thr));
 		id++;
 	}
 	
 	//prints out background jobs line by line
 	public static void displayJobs() {
+		int counter = 1; 
 		for (Iterator<BackgroundCommand> it = backgroundJobs.iterator(); it.hasNext(); ) {
 			//create an iterator
 		    BackgroundCommand job = it.next();
@@ -105,7 +107,9 @@ public class ConcurrentREPL {
 		        it.remove();
 		    } else {
 		    		//print the command string out if it's still running
-		    		System.out.println(" "+job.getIndex() + "." +" "+job.getCommand());
+		    		System.out.println(counter+". " + job.getCommand());
+		    		counter++;
+		    		//System.out.println(" "+job.getIndex() + "." +" "+job.getCommand());
 		    }
 		}
 	}
