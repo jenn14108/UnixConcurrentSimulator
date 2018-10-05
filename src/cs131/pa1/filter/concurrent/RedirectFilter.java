@@ -36,7 +36,7 @@ public class RedirectFilter extends ConcurrentFilter {
 	
 	@Override
 	public void process() {
-		while (true) {
+		while (!Thread.currentThread().isInterrupted()) {
 			try {
 				//break out of the wait and terminate if the previous command has finished 
 				//executing and there is no more input to be received

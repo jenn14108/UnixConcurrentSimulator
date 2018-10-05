@@ -10,7 +10,7 @@ public class ConcurrentREPL {
 	static String currentWorkingDirectory;
 	//a list that stores all background command objects
 	static List<BackgroundCommand> backgroundJobs = new ArrayList<>(); 
-
+	static int id; 
 	static String command;
 	
 	public static void main(String[] args){
@@ -18,6 +18,7 @@ public class ConcurrentREPL {
 		Scanner s = new Scanner(System.in);
 		System.out.print(Message.WELCOME);
 		backgroundJobs = new ArrayList<>(); 
+		id = 1; 
 		
 		while(true) {
 			//obtaining the command from the user
@@ -94,13 +95,13 @@ public class ConcurrentREPL {
 			thr.start();
 		}
 		//using last thread, create background command object and add it to list
-		backgroundJobs.add(new BackgroundCommand(command,thr));
+		backgroundJobs.add(new BackgroundCommand(id,command,thr));
+		id++;
 
 	}
 	
 	//prints out background jobs line by line
 	public static void displayJobs() {
-		int i = 1; 
 		for (Iterator<BackgroundCommand> it = backgroundJobs.iterator(); it.hasNext(); ) {
 			//create an iterator
 		    BackgroundCommand job = it.next();
@@ -110,9 +111,8 @@ public class ConcurrentREPL {
 		    } else {
 
 		    	//print the command string out if it's still running
-		    	System.out.println("\t"+i + "." +" "+job.getCommand());
+		    	System.out.println("\t"+ job.getId() + "." +" "+job.getCommand());
 		    }
-		    i++;
 		}
 	}
 

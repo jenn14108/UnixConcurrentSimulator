@@ -3,11 +3,13 @@ package cs131.pa1.filter.concurrent;
 public class BackgroundCommand {
 	private String command;
 	private Thread thread;
+	private int id;
 
 
-	public BackgroundCommand(String command,Thread thread) {
+	public BackgroundCommand(int id, String command,Thread thread) {
 		this.command = command;
 		this.thread = thread;
+		this.id = id;
 
 	}
 	
@@ -17,5 +19,9 @@ public class BackgroundCommand {
 	
 	public Thread getThread() {
 		return this.thread;
+	}
+	
+	public int getId() {
+		return this.id;
 	}
 }

@@ -12,7 +12,7 @@ public class PrintFilter extends ConcurrentFilter {
 	
 	@Override
 	public void process() {
-		while(true) {
+		while(!Thread.currentThread().isInterrupted()) {
 			try {
 				String line = input.take();
 				if (line.equals(this.POISON_PILL)) {
