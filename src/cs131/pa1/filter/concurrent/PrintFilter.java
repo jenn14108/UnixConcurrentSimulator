@@ -28,7 +28,9 @@ public class PrintFilter extends ConcurrentFilter {
 	
 	@Override
 	public String processLine(String line) {
-		System.out.println(line);
+		if (!Thread.currentThread().isInterrupted()) {
+			System.out.println(line);
+		}
 		return null;
 	}
 }

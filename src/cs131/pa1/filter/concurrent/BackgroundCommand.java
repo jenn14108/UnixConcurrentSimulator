@@ -29,4 +29,8 @@ public class BackgroundCommand {
 	public int getId() {
 		return this.id;
 	}
+	
+	public void setThread(Thread t) {
+		this.thread = t;
+	}
 }

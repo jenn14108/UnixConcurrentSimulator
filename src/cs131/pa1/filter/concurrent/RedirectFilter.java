@@ -46,7 +46,9 @@ public class RedirectFilter extends ConcurrentFilter {
 				//using take() rather than poll() because there is no predefined waiting time, 
 				//will wait until new input is available, otherwise go to sleep 
 				String line = input.take();
-				processLine(line);
+				if (!Thread.currentThread().isInterrupted()) {
+					processLine(line);
+				}
 				if (line.equals(this.POISON_PILL)) {
 					break;
 				}
@@ -58,16 +60,19 @@ public class RedirectFilter extends ConcurrentFilter {
 	
 	@Override
 	public String processLine(String line) {
-		try {
-			if (!line.equals(this.POISON_PILL)) {
-				fw.append(line + "\n");
-			} else {
-				fw.flush();
-				fw.close();
+		if (!Thread.currentThread().isInterrupted()) {
+			try {
+				if (!line.equals(this.POISON_PILL) && !Thread.currentThread().isInterrupted()) {
+					fw.append(line + "\n");
+				} else {
+					fw.flush();
+					fw.close();
+				}
+			} catch (IOException e) {
+				System.out.printf(Message.FILE_NOT_FOUND.toString(), line);
 			}
-		} catch (IOException e) {
-			System.out.printf(Message.FILE_NOT_FOUND.toString(), line);
 		}
+
 		return null;
 	}
 }
