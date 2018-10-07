@@ -8,6 +8,11 @@ import cs131.pa1.filter.Message;
 public class CdFilter extends ConcurrentFilter {
 	private String dirToSet;
 	
+	/**
+	 * This class creates the Cd Filter that changes the current working directory
+	 * @param line: command String of the filter
+	 * @throws Exception
+	 */
 	public CdFilter(String line) throws Exception {
 		super();
 		
@@ -41,8 +46,8 @@ public class CdFilter extends ConcurrentFilter {
 	
 	@Override
 	public void process() {
-		processLine("");
-		output.add(this.POISON_PILL);
+		processLine(""); //calls processLine that changes currentWorkingDirectory
+		output.add(this.POISON_PILL); //adds poison pill to output
 	}
 	
 	public String processLine(String line) {

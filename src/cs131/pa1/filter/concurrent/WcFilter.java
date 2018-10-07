@@ -1,5 +1,9 @@
 package cs131.pa1.filter.concurrent;
 
+/**
+ * This class creates the Wc Filter that display word count of input
+ * @throws Exception
+ */
 public class WcFilter extends ConcurrentFilter {
 	private int linecount;
 	private int wordcount;
@@ -18,11 +22,6 @@ public class WcFilter extends ConcurrentFilter {
 	public void process() {
 		while (true) {
 			try {
-				//break out of the wait and terminate if the previous command has finished 
-				//executing and there is no more input to be received
-				if (input.isEmpty() && prev.isDone()){
-					break;
-				}
 				//using take() rather than poll() because there is no predefined waiting time, 
 				//will wait until new input is available, otherwise go to sleep 
 				String line = input.take();
@@ -52,8 +51,6 @@ public class WcFilter extends ConcurrentFilter {
 		this.linecount++;
 		this.wordcount += line.split(" ").length;
 		this.charcount += line.length();
-//		System.out.println(line);
-//		System.out.println(linecount + " " + wordcount + " " + charcount);
 		return null;
 	}
 }

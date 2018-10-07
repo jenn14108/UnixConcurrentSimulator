@@ -1,5 +1,10 @@
 package cs131.pa1.filter.concurrent;
 
+
+/**
+ * This class creates the Print Filter that prints out the final output 
+ * @throws Exception
+ */
 public class PrintFilter extends ConcurrentFilter {
 	public PrintFilter() {
 		super();
@@ -12,6 +17,8 @@ public class PrintFilter extends ConcurrentFilter {
 	
 	@Override
 	public void process() {
+		
+		//runs as long as currentThread is not interrupted
 		while(!Thread.currentThread().isInterrupted()) {
 			try {
 				String line = input.take();

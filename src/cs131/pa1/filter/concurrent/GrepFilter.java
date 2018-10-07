@@ -5,6 +5,12 @@ import java.util.concurrent.TimeUnit;
 
 import cs131.pa1.filter.Message;
 
+/**
+ * This class creates the Grep Filter that display lines in output 
+ * that contains the argument String 
+ * @param line: command String of the filter
+ * @throws Exception
+ */
 public class GrepFilter extends ConcurrentFilter {
 	private String toFind;
 	

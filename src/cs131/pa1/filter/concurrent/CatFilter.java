@@ -8,7 +8,11 @@ import cs131.pa1.filter.Message;
 
 public class CatFilter extends ConcurrentFilter{
 	private Scanner reader;
-	
+	/**
+	 * This class creates the Cat Filter that reads a file and stores content in output
+	 * @param line: command String of the filter
+	 * @throws Exception
+	 */
 	public CatFilter(String line) throws Exception {
 		super();
 		
@@ -42,6 +46,7 @@ public class CatFilter extends ConcurrentFilter{
 	
 	@Override
 	public void process() {
+		//continues while there's more lines in file
 		while(reader.hasNext()) {
 			String processedLine = processLine("");
 			if(processedLine == null) {

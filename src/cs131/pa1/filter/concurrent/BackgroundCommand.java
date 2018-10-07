@@ -17,19 +17,34 @@ public class BackgroundCommand {
 		this.id = id;
 
 	}
-	
+	/**
+	 * This method returns the command String of the Object
+	 * @return command
+	 */
 	public String getCommand() {
 		return this.command;
 	}
 	
+	/**
+	 * This method returns the Thread of the Object
+	 * @return thread
+	 */
 	public Thread getThread() {
 		return this.thread;
 	}
 	
+	/**
+	 * This method returns the integer Id of the Object
+	 * @return id
+	 */
 	public int getId() {
 		return this.id;
 	}
 	
+	/**
+	 * This method sets the thread field as the thread passed in
+	 * @param new Thread Object
+	 */
 	public void setThread(Thread t) {
 		this.thread = t;
 	}

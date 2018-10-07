@@ -8,9 +8,9 @@ import cs131.pa1.filter.Filter;
 
 public abstract class ConcurrentFilter extends Filter implements Runnable {
 	
-	protected BlockingQueue<String> input;
-	protected BlockingQueue<String> output;
-	protected final String POISON_PILL = "WAKE_UP_TREAD"; 
+	protected BlockingQueue<String> input; //LinkedBlockingQueue that stores the input Strings
+	protected BlockingQueue<String> output; //LinkedBlockingQueue that stores the output Strings
+	protected final String POISON_PILL = "WAKE_UP_TREAD"; //String that represents the flag in output
 
 	@Override
 	public void setPrevFilter(Filter prevFilter) {

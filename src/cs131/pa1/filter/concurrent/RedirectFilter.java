@@ -8,6 +8,11 @@ import java.util.Arrays;
 import cs131.pa1.filter.Filter;
 import cs131.pa1.filter.Message;
 
+/**
+ * This class creates the Redirect Filter that writes output onto a file
+ * @param line: command String of the filter
+ * @throws Exception
+ */
 public class RedirectFilter extends ConcurrentFilter {
 	private FileWriter fw;
 	
@@ -38,11 +43,6 @@ public class RedirectFilter extends ConcurrentFilter {
 	public void process() {
 		while (!Thread.currentThread().isInterrupted()) {
 			try {
-				//break out of the wait and terminate if the previous command has finished 
-				//executing and there is no more input to be received
-				if (input.isEmpty() && prev.isDone()){
-					break;
-				}
 				//using take() rather than poll() because there is no predefined waiting time, 
 				//will wait until new input is available, otherwise go to sleep 
 				String line = input.take();
@@ -60,10 +60,13 @@ public class RedirectFilter extends ConcurrentFilter {
 	
 	@Override
 	public String processLine(String line) {
+		//runs if thread is not being interrupted
 		if (!Thread.currentThread().isInterrupted()) {
 			try {
 				if (!line.equals(this.POISON_PILL) && !Thread.currentThread().isInterrupted()) {
 					fw.append(line + "\n");
+				//closes the fileWriter if thread is being interrupted or we've reached 
+				//to the end of the output
 				} else {
 					fw.flush();
 					fw.close();

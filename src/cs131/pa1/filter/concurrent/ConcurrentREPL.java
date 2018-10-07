@@ -26,11 +26,18 @@ public class ConcurrentREPL {
 			//obtaining the command from the user
 			System.out.print(Message.NEWCOMMAND);
 			command = s.nextLine().trim();
+			
+			
 			if(command.equals("exit")) {
 				break;
+			//if if command is not empty
 			} else if(!command.equals("")) {
+				
+				//display all jobs
 				if (command.equals("repl_jobs")) {
 					displayJobs();
+					
+				//kills a certain background command job
 				} else if (command.split(" ")[0].equals("kill")) {
 					
 					if (command.split(" ").length == 1) {
@@ -38,7 +45,7 @@ public class ConcurrentREPL {
 					} else if (!Character.isDigit(command.split(" ")[1].charAt(0))) {
 						System.out.printf(Message.INVALID_PARAMETER.toString(), command);
 					} else {
-						
+						//index of the background job to kill
 						int index = command.charAt(command.length()-1)-'0';
 
 						int i = 1;
@@ -62,6 +69,7 @@ public class ConcurrentREPL {
 				} else {
 					//building the filters list from the command
 					List<ConcurrentFilter> filterlist = ConcurrentCommandBuilder.createFiltersFromCommand(command);
+					
 					if (filterlist != null) {
 						if (command.endsWith("&")) {
 							createBackThreadExecuteFilters(filterlist);
@@ -75,6 +83,7 @@ public class ConcurrentREPL {
 		
 		System.out.print(Message.GOODBYE);
 	}
+	
 	
 	public static void createThreadExecuteFilters(List<ConcurrentFilter> filterlist) {
 		//Creating threads from the filter list and starting all threads

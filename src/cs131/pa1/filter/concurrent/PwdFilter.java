@@ -1,5 +1,9 @@
 package cs131.pa1.filter.concurrent;
 
+/**
+ * This class creates the Pwd Filter that display the currentWorkingDirectory
+ * @throws Exception
+ */
 public class PwdFilter extends ConcurrentFilter {
 	public PwdFilter() {
 		super();
