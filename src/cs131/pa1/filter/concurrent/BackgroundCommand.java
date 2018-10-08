@@ -1,5 +1,9 @@
 package cs131.pa1.filter.concurrent;
 
+/**
+ * This BackgroundCommand class is created specifically to keep track of 
+ * any jobs that may be running in the background
+ */
 public class BackgroundCommand {
 	private String command; //stores the line of command from user
 	private Thread thread; //stores the last thread of the command
@@ -39,13 +43,5 @@ public class BackgroundCommand {
 	 */
 	public int getId() {
 		return this.id;
-	}
-	
-	/**
-	 * This method sets the thread field as the thread passed in
-	 * @param new Thread Object
-	 */
-	public void setThread(Thread t) {
-		this.thread = t;
 	}
 }
