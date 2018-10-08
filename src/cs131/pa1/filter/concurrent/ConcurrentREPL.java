@@ -14,7 +14,6 @@ public class ConcurrentREPL {
 	static String command;
 	
 	
-	@SuppressWarnings("deprecation")
 	public static void main(String[] args){
 		currentWorkingDirectory = System.getProperty("user.dir");
 		Scanner s = new Scanner(System.in);
@@ -27,27 +26,27 @@ public class ConcurrentREPL {
 			System.out.print(Message.NEWCOMMAND);
 			command = s.nextLine().trim();
 			
-			
 			if(command.equals("exit")) {
 				break;
 			//if if command is not empty
 			} else if(!command.equals("")) {
 				
-				//display all jobs
+				//user wants jobs displayed
 				if (command.equals("repl_jobs")) {
 					displayJobs();
 					
-				//kills a certain background command job
+				//user wants to kill a certain background job
 				} else if (command.split(" ")[0].equals("kill")) {
-					
+					//before proceeding any further, check that parameter is valid/exists
 					if (command.split(" ").length == 1) {
 						System.out.printf(Message.REQUIRES_PARAMETER.toString(), command);
 					} else if (!Character.isDigit(command.split(" ")[1].charAt(0))) {
 						System.out.printf(Message.INVALID_PARAMETER.toString(), command);
 					} else {
-						//index of the background job to kill
+						//proceed to kill command by first obtaining the index 
+						//of the background job to kill
 						int index = command.charAt(command.length()-1)-'0';
-
+						//counter to make sure we kill the right job
 						int i = 1;
 						//go through the background command list
 						for(BackgroundCommand job: backgroundJobs) {
@@ -75,11 +74,13 @@ public class ConcurrentREPL {
 				}
 			}
 		}
-		
 		System.out.print(Message.GOODBYE);
 	}
 	
-	
+	/**
+	 * This method creates threads to execute normal commands (not background)
+	 * @param filterlist
+	 */
 	public static void createThreadExecuteFilters(List<ConcurrentFilter> filterlist) {
 		//Creating threads from the filter list and starting all threads
 		Thread thr = new Thread();
@@ -88,16 +89,18 @@ public class ConcurrentREPL {
 			thr.start();
 		}
 		
-		//main waiting for each child thread to complete 
+		//main waiting for each child thread to complete before regaining control
 		try {
 			thr.join();
 		} catch (InterruptedException e){
 			e.printStackTrace();
 		}
-		
 	}
 	
-	
+	/**
+	 * This method creates and run threads for background jobs
+	 * @param filterlist
+	 */
 	public static void createBackThreadExecuteFilters(List<ConcurrentFilter> filterlist) {
 		//Creating threads from the filter list and starting all threads
 		Thread thr = new Thread();
@@ -125,5 +128,4 @@ public class ConcurrentREPL {
 		    }
 		}
 	}
-
 }
