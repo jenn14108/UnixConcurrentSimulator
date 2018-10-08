@@ -53,13 +53,8 @@ public class ConcurrentREPL {
 						for(BackgroundCommand job: backgroundJobs) {
 							//delete the job from the list if its id matches user input index
 							if (index == i) {
-								//because interrupt does not seem to work, as it leads to some race 
-								//condition in which the redirect/print filter always finishes BEFORE it is 
-								//interrupted, we decided to first interrupt the thread, terminate the thread
-								//and set it to null
+								//interrupt thread. Deal with killing it in redirect or print
 								job.getThread().interrupt();
-								job.getThread().stop();
-								job.setThread(null);
 								backgroundJobs.remove(job);
 								break;
 							}

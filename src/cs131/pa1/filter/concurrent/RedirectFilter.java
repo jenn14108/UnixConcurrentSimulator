@@ -41,7 +41,7 @@ public class RedirectFilter extends ConcurrentFilter {
 	
 	@Override
 	public void process() {
-		while (!Thread.currentThread().isInterrupted()) {
+		while (true) {
 			try {
 				//using take() rather than poll() because there is no predefined waiting time, 
 				//will wait until new input is available, otherwise go to sleep 
@@ -54,26 +54,24 @@ public class RedirectFilter extends ConcurrentFilter {
 				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+				return;
 			}
 		}
 	}
 	
 	@Override
 	public String processLine(String line) {
-		//runs if thread is not being interrupted
-		if (!Thread.currentThread().isInterrupted()) {
-			try {
-				if (!line.equals(this.POISON_PILL) && !Thread.currentThread().isInterrupted()) {
-					fw.append(line + "\n");
-				//closes the fileWriter if thread is being interrupted or we've reached 
-				//to the end of the output
-				} else {
-					fw.flush();
-					fw.close();
-				}
-			} catch (IOException e) {
-				System.out.printf(Message.FILE_NOT_FOUND.toString(), line);
+		try {
+			if (!line.equals(this.POISON_PILL)) {
+				fw.append(line + "\n");
+			//closes the fileWriter if thread is being interrupted or we've reached 
+			//to the end of the output
+			} else {
+				fw.flush();
+				fw.close();
 			}
+		} catch (IOException e) {
+			System.out.printf(Message.FILE_NOT_FOUND.toString(), line);
 		}
 
 		return null;
