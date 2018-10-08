@@ -57,6 +57,7 @@ public abstract class ConcurrentFilter extends Filter implements Runnable {
 				} 
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+				return;
 			}
 		}
 	}

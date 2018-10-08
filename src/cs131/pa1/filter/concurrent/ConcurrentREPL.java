@@ -37,6 +37,7 @@ public class ConcurrentREPL {
 					
 				//user wants to kill a certain background job
 				} else if (command.split(" ")[0].equals("kill")) {
+					
 					//before proceeding any further, check that parameter is valid/exists
 					if (command.split(" ").length == 1) {
 						System.out.printf(Message.REQUIRES_PARAMETER.toString(), command);
